@@ -1,7 +1,32 @@
 // Année automatique dans le pied de page
 document.getElementById("annee").textContent = new Date().getFullYear();
 
-// Fait défiler les noms du titre toutes les dix secondes.
+const boutonMenu = document.querySelector(".nav-toggle");
+const liensMenu = document.getElementById("nav-links");
+
+function definirMenuOuvert(ouvert) {
+  boutonMenu.setAttribute("aria-expanded", String(ouvert));
+  boutonMenu.setAttribute("aria-label", ouvert ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation");
+  liensMenu.classList.toggle("is-open", ouvert);
+}
+
+boutonMenu.addEventListener("click", () => {
+  definirMenuOuvert(boutonMenu.getAttribute("aria-expanded") !== "true");
+});
+
+liensMenu.addEventListener("click", (evenement) => {
+  if (evenement.target.closest("a")) {
+    definirMenuOuvert(false);
+  }
+});
+
+document.addEventListener("keydown", (evenement) => {
+  if (evenement.key === "Escape") {
+    definirMenuOuvert(false);
+  }
+});
+
+// Fait défiler les noms du titre toutes les trois secondes.
 const titreNom = document.getElementById("hero-name");
 const noms = ["ADJAHO", "LÉONCE", "BIENVENU"];
 let nomActuel = 0;
@@ -20,7 +45,7 @@ window.setInterval(() => {
   mot.setAttribute("aria-hidden", "true");
   mot.append(...lettres);
   titreNom.replaceChildren(mot);
-}, 10000);
+}, 3000);
 
 // Met en évidence le lien du menu correspondant à la section visible
 const liens = document.querySelectorAll("nav a[href^='#']");
